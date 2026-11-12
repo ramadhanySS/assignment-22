@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+      @layer components {
+        .btn {
+          @apply h-[74px] w-[222px] cursor-pointer border-0 bg-[#b88e2f] text-[#fff3e3] hover:bg-[#fffefe] hover:text-[#b88e2f] active:bg-[#6f5824] max-sm:h-[60px] max-sm:max-w-full;
+        }
+
+        .btn-cart {
+          @apply w-4/5 cursor-pointer border-0 bg-white p-3 font-bold text-[#b88e2f];
+        }
+
+        .btn-show {
+          @apply mt-5 h-12 w-[245px] border border-[#b88e2f] bg-transparent font-bold text-[#b88e2f] hover:bg-[#b88e2f] hover:text-white;
+        }
+
+        .card {
+          @apply flex flex-col items-center gap-5 font-bold;
+        }
+
+        .card-product {
+          @apply w-[250px] max-w-[280px] flex-[1_1_250px] bg-[#f4f5f7] font-[Arial,sans-serif] max-sm:flex-[1_1_250px];
+        }
+
+        .card-image {
+          @apply relative overflow-hidden;
+        }
+
+        .card-overlay {
+          @apply absolute inset-0 flex flex-col items-center justify-center gap-5;
+          background: rgba(58, 58, 58, 0.65);
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease;
+        }
+
+        .card-actions {
+          @apply flex w-full justify-center gap-[10px];
+        }
+
+        .card-actions button {
+          @apply cursor-pointer border-0 bg-transparent p-1 text-xs text-white;
+        }
+
+        .card-content {
+          @apply p-3;
+        }
+
+        .card-content h2 {
+          @apply mb-2 text-xl;
+        }
+
+        .card-content p {
+          @apply mb-2 text-[#898989];
+        }
+
+        .card-content h3 {
+          @apply text-base;
+        }
+      }
+    </style>
+    <title>Furniro</title>
+  </head>
+  <body>
+    <div class="navbar flex flex-wrap items-center justify-between gap-5 px-[clamp(16px,5vw,100px)] py-6 max-sm:justify-center">
+      <div class="logo w-[min(185px,40vw)]">
+        <img class="w-full" src="assets/logo.png" alt="logo" />
+      </div>
+      <div class="nav-link flex flex-wrap justify-center gap-[clamp(16px,4vw,75px)]">
+        <a class="text-black no-underline" href="#">Home</a>
+        <a class="text-black no-underline" href="">Shop</a>
+        <a class="text-black no-underline" href="">About</a>
+        <a class="text-black no-underline" href="">Contact</a>
+      </div>
+      <div class="icon-section flex gap-[clamp(12px,2vw,20px)]">
+        <svg
+          class="alert w-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            fill="currentColor"
+            d="M20 12V7h2v6h-2m0 4h2v-2h-2m-10-2c2.67 0 8 1.34 8 4v3H2v-3c0-2.66 5.33-4 8-4m0-9a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10.9c-2.97 0-6.1 1.46-6.1 2.1v1.1h12.2V17c0-.64-3.13-2.1-6.1-2.1m0-9A2.1 2.1 0 0 0 7.9 8a2.1 2.1 0 0 0 2.1 2.1A2.1 2.1 0 0 0 12.1 8A2.1 2.1 0 0 0 10 5.9"
+          />
+        </svg>
+        <svg class="w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            fill="currentColor"
+            d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5l-1.5 1.5l-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16A6.5 6.5 0 0 1 3 9.5A6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14S14 12 14 9.5S12 5 9.5 5"
+          />
+        </svg>
+        <svg class="w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7 3C4.239 3 2 5.216 2 7.95c0 2.207.875 7.445 9.488 12.74a.99.99 0 0 0 1.024 0C21.126 15.395 22 10.157 22 7.95C22 5.216 19.761 3 17 3s-5 3-5 3s-2.239-3-5-3"
+          />
+        </svg>
+        <svg class="w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M2 1.25a.75.75 0 0 0 0 1.5h1.182a.75.75 0 0 1 .744.654l1.354 10.45c.046.354.158.684.323.98a2.501 2.501 0 0 0 .647 4.916h.128a2.25 2.25 0 1 0 4.244 0h5.756a2.25 2.25 0 1 0 4.244 0H21a.75.75 0 0 0 0-1.5H6.25a1 1 0 1 1 0-2h12.49a3.25 3.25 0 0 0 3.233-2.924l.772-7.65a1.75 1.75 0 0 0-1.741-1.926H5.484l-.07-.54a2.25 2.25 0 0 0-2.232-1.96zm16.5 18.5a.75.75 0 1 0 0 1.5a.75.75 0 0 0 0-1.5m-10.75.75a.75.75 0 1 1 1.5 0a.75.75 0 0 1-1.5 0m10.99-5.75c.898 0 1.65-.68 1.74-1.574l.773-7.65a.25.25 0 0 0-.249-.276H5.678l1.09 8.41a1.25 1.25 0 0 0 1.24 1.09z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span id="cart-count" class="cart-count" aria-live="polite" aria-label="Items in cart">0</span>
+      </div>
+    </div>
+    <div class="home w-full">
+      <div class="parent-container relative">
+        <img
+          class="block h-[clamp(360px,56vw,717px)] w-full object-cover max-sm:h-[520px]"
+          src="assets/scandinavian-interior-mockup-wall-decal-background 1.png"
+          alt="home"
+        />
+        <div class="child-container absolute right-[clamp(16px,5vw,54px)] top-1/2 flex min-h-[clamp(300px,34vw,443px)] w-[min(643px,52%)] -translate-y-1/2 flex-col items-start justify-around gap-4 bg-[#fff3e3] p-[clamp(24px,5vw,62px)_clamp(20px,3.5vw,43px)] max-sm:bottom-4 max-sm:left-4 max-sm:right-4 max-sm:top-auto max-sm:w-auto max-sm:min-h-0 max-sm:translate-y-0">
+          <p>New Arrival</p>
+          <h1 class="text-[clamp(32px,4vw,52px)] text-[#b88e2f]">Discover Our New Collection</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores
+            error distinctio rem modi sunt officia.
+          </p>
+          <button class="btn">Buy Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-carousel mt-[clamp(36px,5vw,56px)] mx-4 flex flex-col items-center gap-[clamp(20px,3vw,40px)] text-center">
+      <h2 class="text-[clamp(24px,3vw,32px)]">Browse The Range</h2>
+      <p class="text-[#9f9f9f]">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+      </p>
+      <div class="range-carousel">
+        <button class="range-control" type="button" data-direction="-1" aria-label="Previous range">&larr;</button>
+        <div class="range-viewport">
+          <div class="range-track">
+            <div class="card range-card">
+              <img class="block h-auto w-full aspect-[381/480] object-cover" src="assets/image 106.png" alt="Dining room" />
+              <p>Dining</p>
+            </div>
+            <div class="card range-card">
+              <img class="block h-auto w-full aspect-[381/480] object-cover" src="assets/image 100.png" alt="Living room" />
+              <p>Living</p>
+            </div>
+            <div class="card range-card">
+              <img class="block h-auto w-full aspect-[381/480] object-cover" src="assets/image 101.png" alt="Bedroom" />
+              <p>Bedroom</p>
+            </div>
+          </div>
+        </div>
+        <button class="range-control" type="button" data-direction="1" aria-label="Next range">&rarr;</button>
+      </div>
+    </div>
+    <div class="our-product mx-4 my-5 flex flex-col items-center gap-3">
+      <h2>Our Product</h2>
+      <div class="container-card flex w-full flex-wrap justify-center gap-5" aria-live="polite">
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 1.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 2.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 3.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 4.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/Rectangle 25.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 6.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 7.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 8.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/image 9.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/Rectangle 38.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-product">
+          <div class="card-image">
+            <img class="block h-[250px] w-full object-cover" src="assets/Rectangle 43.png" alt="image-1" />
+            <div class="card-overlay">
+              <button class="btn-cart">Add to Cart</button>
+              <div class="card-actions">
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path d="M0 0h1024v1024H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.7 160.7 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120s-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3c0 66.2 53.8 120 120 120s120-53.8 120-120s-53.8-120-120-120m0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52s-52-23.3-52-52s23.3-52 52-52M312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88s88 39.5 88 88s-39.5 88-88 88m440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52s52 23.3 52 52s-23.3 52-52 52"
+                    />
+                  </svg>
+                  Share
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 6H3m18 0l-4 4m4-4l-4-4M3 18h18M3 18l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                  Compare
+                </button>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <path d="M0 0h48v48H0z" fill="none" />
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M24.136 9.1c3.31-3.409 5.46-3.6 7.525-3.6c5.815 0 10.478 6.055 10.394 11.612c-.131 8.693-5.281 16.117-17.932 25.388C12.748 34.747 6.137 24.862 5.947 17.599C5.808 12.318 10.823 5.5 16.665 5.5c2.256 0 4.125.148 7.471 3.6"
+                    />
+                  </svg>
+                  Like
+                </button>
+              </div>
+            </div>
+            <div class="card-content">
+              <h2>Syltherine</h2>
+              <p>Stylish cafe chair</p>
+              <h3>Rp 2.500.000</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-show" id="show-more" type="button" hidden>Show More</button>
+    </div>
+    <div class="carouselProduct">
+      <div class="containerProduct">
+        <div class="caption">
+          <h2>50+ Beautiful rooms inspiration</h2>
+          <p>
+            Our designer already made a lot of beautiful prototipe of rooms that
+            inspire you
+          </p>
+          <a href="" class="btn-cart">Explore More</a>
+        </div>
+      </div>
+      <div class="carousel"></div>
+    </div>
+    <div class="footer mt-5 flex flex-col gap-[clamp(32px,5vw,48px)] border-t border-[#b3b3b3] px-[clamp(16px,7vw,100px)] pb-[38px] pt-[clamp(32px,5vw,48px)]">
+      <div class="top-footer flex flex-wrap items-start justify-between gap-5">
+        <div class="copyright flex flex-[1_1_220px] flex-col gap-10">
+          <h2>Funiro.</h2>
+          <p class="max-w-[260px] text-[#9f9f9f]">
+            400 University Drive Suite 200 Coral Gables,<br />
+            FL 33134 USA
+          </p>
+        </div>
+        <div class="links flex flex-[1_1_120px] flex-col gap-10">
+          <p class="text-[#9f9f9f]">Links</p>
+          <a class="text-black" href="">Home</a>
+          <a class="text-black" href="">Shop</a>
+          <a class="text-black" href="">About</a>
+          <a class="text-black" href="">Contact</a>
+        </div>
+        <div class="help flex flex-[1_1_120px] flex-col gap-10">
+          <p class="text-[#9f9f9f]">Help</p>
+          <a class="text-black" href="">Payment Option</a>
+          <a class="text-black" href="">Return</a>
+          <a class="text-black" href="">Privacy Policies</a>
+        </div>
+        <div class="newsletter flex flex-[1_1_220px] flex-col gap-5">
+          <p class="text-[#9f9f9f]">Newsletter</p>
+          <form class="flex flex-wrap gap-3">
+            <input
+              class="min-w-0 max-w-full border-b border-black"
+              type="email"
+              id="email"
+              name="email"
+              value="Enter Your Email Address"
+            />
+            <button class="border-0 border-b border-black bg-transparent" for="subscribe">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="bottom-footer border-t border-[#b3b3b3] pt-[35px]">
+        <p>2023 furino. All rights reverved</p>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
